@@ -1,2 +1,2 @@
 # informatica-2
-desafío 1
+laboratorio 3
