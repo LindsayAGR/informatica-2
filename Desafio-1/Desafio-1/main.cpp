@@ -20,3 +20,4 @@ unsigned char aplicarXOR(unsigned char b, unsigned char K) {
 
 int descomprimirRLE(const unsigned char* entrada, int len, char* salida, int maxOut) {
     if (!entrada || !salida || len <= 0) return -1;
+}
