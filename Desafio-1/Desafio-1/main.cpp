@@ -16,3 +16,7 @@ unsigned char rotarDerecha(unsigned char b, int n) {
 unsigned char aplicarXOR(unsigned char b, unsigned char K) {
     return (unsigned char)(b ^ K);
 }
+// Descompresión RLE
+
+int descomprimirRLE(const unsigned char* entrada, int len, char* salida, int maxOut) {
+    if (!entrada || !salida || len <= 0) return -1;
