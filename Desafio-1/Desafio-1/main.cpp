@@ -38,3 +38,31 @@ int descomprimirRLE(const unsigned char* entrada, int len, char* salida, int max
         }
         if (ok) { salida[out] = '\0'; return out; }
     }
+   // Variante binaria: pares (1 byte num, 1 byte char)
+    if (len % 2 == 0) {
+        int out = 0; bool ok = true;
+        for (int i = 0; i < len; i += 2) {
+            int num = entrada[i];
+            unsigned char c = entrada[i+1];
+            if (num == 0) { ok = false; break; }
+            if (out + num > maxOut - 1) { ok = false; break; }
+            for (int k = 0; k < num; k++) salida[out++] = (char)c;
+        }
+        if (ok) { salida[out] = '\0'; return out; }
+    }
+
+    // Variante binaria: triples (2 bytes num, 1 byte char)
+    if (len % 3 == 0) {
+        int out = 0; bool ok = true;
+        for (int i = 0; i < len; i += 3) {
+            int num = (entrada[i] << 8) | entrada[i+1];
+            unsigned char c = entrada[i+2];
+            if (num == 0) { ok = false; break; }
+            if (out + num > maxOut - 1) { ok = false; break; }
+            for (int k = 0; k < num; k++) salida[out++] = (char)c;
+        }
+        if (ok) { salida[out] = '\0'; return out; }
+    }
+
+    return -1; // ninguna funcionó
+}
