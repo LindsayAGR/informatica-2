@@ -156,8 +156,8 @@ unsigned char* leerArchivoBinario(const char* ruta, int* outLen) {
 // MAIN
 int main() {
     int casos;
-    printf("Ingrese el numero de casos a evaluar: ");
-    scanf("%d", &casos);
+  cout<<("Ingrese el numero de casos a evaluar: ");
+  cin>>("%d", &casos);
     
     for (int caso = 1; caso <= casos; caso++) {
         // Archivos
@@ -172,7 +172,7 @@ int main() {
         
         char fragmento[MAX_FRAGMENTO];
         if (leerPrimeraLinea(archPista, fragmento, sizeof(fragmento)) != 0) {
-            printf("No se pudo abrir %s\n", archPista);
+            cout<<("No se pudo abrir %s\n", archPista);
             free(enc); continue;
         }
         
