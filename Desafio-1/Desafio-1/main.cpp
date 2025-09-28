@@ -181,3 +181,53 @@ int main() {
         
         int encontrado = 0, nOK = -1, kOK = -1, outLen = 0;
         char metodo[8] = "";
+// Fuerza bruta de n y K
+        for (int n = 1; n <= 7 && !encontrado; n++) {
+            for (int K = 0; K <= 255 && !encontrado; K++) {
+                for (int i = 0; i < lenEnc; i++) {
+                    unsigned char x = aplicarXOR(enc[i], (unsigned char) K);
+                    desen[i] = rotarDerecha(x, n);
+                }
+                int r = descomprimirRLE(desen, lenEnc, salida, MAX_SALIDA);
+                if (r > 0 && contieneFragmento(salida, r, fragmento)) {
+                    encontrado = 1; strcpy(metodo, "RLE");
+                    nOK = n; kOK = K; outLen = r; break;
+                }
+                int l = descomprimirLZ78(desen, lenEnc, salida, MAX_SALIDA);
+                if (l > 0 && contieneFragmento(salida, l, fragmento)) {
+                    encontrado = 1; strcpy(metodo, "LZ78");
+                    nOK = n; kOK = K; outLen = l; break;
+                }
+            }
+        }
+
+        printf("\n=== Caso %d ===\n", caso);
+        printf("** Encriptado%d.txt **\n", caso);
+        if (encontrado) {
+            printf("Compresión: %s\n", metodo);
+            printf("Rotación: %d\n", nOK);
+            printf("Key= 0x%02X\n", kOK);
+            printf("Pista usada: %s\n", fragmento);
+
+            printf("Preview: ");
+            int lim = (outLen < PREVIEW_MAX) ? outLen : PREVIEW_MAX;
+            for (int i = 0; i < lim; i++) putchar(salida[i]);
+            putchar('\n');
+
+            FILE* fo = fopen(archOut, "wb");
+            if (fo) {
+                fwrite(salida, 1, outLen, fo);
+                fclose(fo);
+                printf("Resultado guardado en: %s\n", archOut);
+            }
+        } else {
+            printf("No se pudo reconstruir el mensaje\n");
+        }
+
+        free(enc); free(desen); free(salida);
+    }
+
+    printf("\nProceso finalizado.\n");
+    return 0;
+}
+
