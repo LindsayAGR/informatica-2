@@ -106,3 +106,35 @@ int descomprimirRLE(const unsigned char* entrada, int len, char* salida, int max
     free(prefix); free(ch); free(temp);
     return out;
 }
+
+// Buscar fragmento en salida
+
+int contieneFragmento(const char* texto, int len, const char* frag) {
+    int fragLen = (int) strlen(frag);
+    if (fragLen == 0) return 1;
+    if (fragLen > len) return 0;
+
+    for (int i = 0; i <= len - fragLen; i++) {
+        int j = 0;
+        while (j < fragLen && texto[i+j] == frag[j]) j++;
+        if (j == fragLen) return 1;
+    }
+    return 0;
+}
+
+
+// Leer archivo binario
+
+unsigned char* leerArchivoBinario(const char* ruta, int* outLen) {
+    FILE* f = fopen(ruta, "rb");
+    if (!f) return NULL;
+    fseek(f, 0, SEEK_END);
+    long l = ftell(f);
+    rewind(f);
+    unsigned char* buf = (unsigned char*) malloc((size_t) l);
+    if (!buf) { fclose(f); return NULL; }
+    fread(buf, 1, (size_t) l, f);
+    fclose(f);
+    *outLen = (int) l;
+    return buf;
+}
