@@ -66,24 +66,24 @@ int descomprimirRLE(const unsigned char* entrada, int len, char* salida, int max
 
     return -1; // ninguna funcionó
 }
-// Descompresión LZ78
-
-int descomprimirLZ78(const unsigned char* entrada, int len, char* salida, int maxOut) {
+    // Descompresión LZ78
+ 
+    int descomprimirLZ78(const unsigned char* entrada, int len, char* salida, int maxOut) {
     if (!entrada || !salida) return -1;
     if (len % 3 != 0) return -1;
-
+    
     int pares = len / 3;
     int* prefix = (int*) malloc(sizeof(int) * (pares + 2));
     unsigned char* ch = (unsigned char*) malloc(sizeof(unsigned char) * (pares + 2));
     unsigned char* temp = (unsigned char*) malloc(65536);
     if (!prefix || !ch || !temp) { free(prefix); free(ch); free(temp); return -1; }
-
+    
     int dicSize = 0, out = 0;
     for (int p = 0; p < pares; p++) {
         int off = p * 3;
         int pref = (entrada[off] << 8) | entrada[off+1];
         unsigned char c = entrada[off+2];
-
+        
         int tlen = 0, cur = pref;
         while (cur > 0) {
             if (cur > dicSize) { free(prefix); free(ch); free(temp); return -1; }
@@ -96,12 +96,12 @@ int descomprimirLZ78(const unsigned char* entrada, int len, char* salida, int ma
         }
         if (out >= maxOut - 1) { free(prefix); free(ch); free(temp); return -1; }
         salida[out++] = (char) c;
-
+        
         prefix[dicSize] = pref;
         ch[dicSize] = c;
         dicSize++;
     }
-
+    
     salida[out] = '\0';
     free(prefix); free(ch); free(temp);
     return out;
