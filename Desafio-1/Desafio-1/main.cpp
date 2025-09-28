@@ -138,3 +138,45 @@ unsigned char* leerArchivoBinario(const char* ruta, int* outLen) {
     *outLen = (int) l;
     return buf;
 }
+
+    // Leer primera línea (pista)
+
+    int leerPrimeraLinea(const char* ruta, char* dest, int size) {
+    FILE* f = fopen(ruta, "r");
+    if (!f) return -1;
+    if (!fgets(dest, size, f)) { fclose(f); return -1; }
+    int L = strlen(dest);
+    while (L > 0 && (dest[L-1] == '\n' || dest[L-1] == '\r')) dest[--L] = '\0';
+    fclose(f);
+    return 0;
+}
+
+
+// MAIN
+int main() {
+    int casos;
+    printf("Ingrese el numero de casos a evaluar: ");
+    scanf("%d", &casos);
+    
+    for (int caso = 1; caso <= casos; caso++) {
+        // Archivos
+        char archEnc[256], archPista[256], archOut[256];
+        sprintf(archEnc, "%sEncriptado%d.txt", BASE_DIR, caso);
+        sprintf(archPista, "%spista%d.txt", BASE_DIR, caso);
+        sprintf(archOut, "%sResultado%d.txt", BASE_DIR, caso);
+        
+        int lenEnc;
+        unsigned char* enc = leerArchivoBinario(archEnc, &lenEnc);
+        if (!enc) { printf("No se pudo abrir %s\n", archEnc); continue; }
+        
+        char fragmento[MAX_FRAGMENTO];
+        if (leerPrimeraLinea(archPista, fragmento, sizeof(fragmento)) != 0) {
+            printf("No se pudo abrir %s\n", archPista);
+            free(enc); continue;
+        }
+        
+        unsigned char* desen = (unsigned char*) malloc(lenEnc);
+        char* salida = (char*) malloc(MAX_SALIDA);
+        
+        int encontrado = 0, nOK = -1, kOK = -1, outLen = 0;
+        char metodo[8] = "";
