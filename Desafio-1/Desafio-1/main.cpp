@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 // main.cpp - Versión intermedia (sencilla y comentada)
 // Cumple con el Desafío 1: detectar método (RLE o LZ78),
@@ -8,6 +9,13 @@
 #include <cstring>
 
 // =============================
+=======
+#include <iostream>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+using namespace std;
+>>>>>>> c3509c19ab68f320c970b263dfd7cf48f19dc139
 // Constantes
 // =============================
 #define MAX_FRAGMENTO 8192         // Tamaño máximo de pista (texto conocido)
@@ -24,6 +32,7 @@ unsigned char rotarDerecha(unsigned char b, int n) {
 unsigned char aplicarXOR(unsigned char b, unsigned char K) {
     return (unsigned char)(b ^ K);
 }
+<<<<<<< HEAD
 
 // =============================
 // Descompresión RLE
@@ -32,6 +41,13 @@ int descomprimirRLE(const unsigned char* entrada, int len, char* salida, int max
     if (!entrada || !salida || len <= 0) return -1;
 
     // Variante ASCII "12A3B..."
+=======
+// Descompresión RLE
+
+int descomprimirRLE(const unsigned char* entrada, int len, char* salida, int maxOut) {
+    if (!entrada || !salida || len <= 0) return -1;
+  // Variante ASCII "12A3B..."
+>>>>>>> c3509c19ab68f320c970b263dfd7cf48f19dc139
     {
         int i = 0, out = 0;
         bool ok = true;
@@ -49,8 +65,12 @@ int descomprimirRLE(const unsigned char* entrada, int len, char* salida, int max
         }
         if (ok) { salida[out] = '\0'; return out; }
     }
+<<<<<<< HEAD
 
     // Variante binaria: pares (1 byte num, 1 byte char)
+=======
+   // Variante binaria: pares (1 byte num, 1 byte char)
+>>>>>>> c3509c19ab68f320c970b263dfd7cf48f19dc139
     if (len % 2 == 0) {
         int out = 0; bool ok = true;
         for (int i = 0; i < len; i += 2) {
@@ -78,6 +98,7 @@ int descomprimirRLE(const unsigned char* entrada, int len, char* salida, int max
 
     return -1; // ninguna funcionó
 }
+<<<<<<< HEAD
 
 // =============================
 // Descompresión LZ78
@@ -86,18 +107,34 @@ int descomprimirLZ78(const unsigned char* entrada, int len, char* salida, int ma
     if (!entrada || !salida) return -1;
     if (len % 3 != 0) return -1;
 
+=======
+    // Descompresión LZ78
+ 
+    int descomprimirLZ78(const unsigned char* entrada, int len, char* salida, int maxOut) {
+    if (!entrada || !salida) return -1;
+    if (len % 3 != 0) return -1;
+    
+>>>>>>> c3509c19ab68f320c970b263dfd7cf48f19dc139
     int pares = len / 3;
     int* prefix = (int*) malloc(sizeof(int) * (pares + 2));
     unsigned char* ch = (unsigned char*) malloc(sizeof(unsigned char) * (pares + 2));
     unsigned char* temp = (unsigned char*) malloc(65536);
     if (!prefix || !ch || !temp) { free(prefix); free(ch); free(temp); return -1; }
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> c3509c19ab68f320c970b263dfd7cf48f19dc139
     int dicSize = 0, out = 0;
     for (int p = 0; p < pares; p++) {
         int off = p * 3;
         int pref = (entrada[off] << 8) | entrada[off+1];
         unsigned char c = entrada[off+2];
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> c3509c19ab68f320c970b263dfd7cf48f19dc139
         int tlen = 0, cur = pref;
         while (cur > 0) {
             if (cur > dicSize) { free(prefix); free(ch); free(temp); return -1; }
@@ -110,20 +147,33 @@ int descomprimirLZ78(const unsigned char* entrada, int len, char* salida, int ma
         }
         if (out >= maxOut - 1) { free(prefix); free(ch); free(temp); return -1; }
         salida[out++] = (char) c;
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> c3509c19ab68f320c970b263dfd7cf48f19dc139
         prefix[dicSize] = pref;
         ch[dicSize] = c;
         dicSize++;
     }
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> c3509c19ab68f320c970b263dfd7cf48f19dc139
     salida[out] = '\0';
     free(prefix); free(ch); free(temp);
     return out;
 }
 
+<<<<<<< HEAD
 // =============================
 // Buscar fragmento en salida
 // =============================
+=======
+// Buscar fragmento en salida
+
+>>>>>>> c3509c19ab68f320c970b263dfd7cf48f19dc139
 int contieneFragmento(const char* texto, int len, const char* frag) {
     int fragLen = (int) strlen(frag);
     if (fragLen == 0) return 1;
@@ -137,9 +187,15 @@ int contieneFragmento(const char* texto, int len, const char* frag) {
     return 0;
 }
 
+<<<<<<< HEAD
 // =============================
 // Leer archivo binario
 // =============================
+=======
+
+// Leer archivo binario
+
+>>>>>>> c3509c19ab68f320c970b263dfd7cf48f19dc139
 unsigned char* leerArchivoBinario(const char* ruta, int* outLen) {
     FILE* f = fopen(ruta, "rb");
     if (!f) return NULL;
@@ -154,10 +210,16 @@ unsigned char* leerArchivoBinario(const char* ruta, int* outLen) {
     return buf;
 }
 
+<<<<<<< HEAD
 // =============================
 // Leer primera línea (pista)
 // =============================
 int leerPrimeraLinea(const char* ruta, char* dest, int size) {
+=======
+    // Leer primera línea (pista)
+
+    int leerPrimeraLinea(const char* ruta, char* dest, int size) {
+>>>>>>> c3509c19ab68f320c970b263dfd7cf48f19dc139
     FILE* f = fopen(ruta, "r");
     if (!f) return -1;
     if (!fgets(dest, size, f)) { fclose(f); return -1; }
@@ -167,6 +229,7 @@ int leerPrimeraLinea(const char* ruta, char* dest, int size) {
     return 0;
 }
 
+<<<<<<< HEAD
 // =============================
 // MAIN
 // =============================
@@ -175,12 +238,22 @@ int main() {
     printf("Ingrese el numero de casos a evaluar: ");
     scanf("%d", &casos);
 
+=======
+
+// MAIN
+int main() {
+    int casos;
+  cout<<("Ingrese el numero de casos a evaluar: ");
+  cin>>("%d", &casos);
+    
+>>>>>>> c3509c19ab68f320c970b263dfd7cf48f19dc139
     for (int caso = 1; caso <= casos; caso++) {
         // Archivos
         char archEnc[256], archPista[256], archOut[256];
         sprintf(archEnc, "%sEncriptado%d.txt", BASE_DIR, caso);
         sprintf(archPista, "%spista%d.txt", BASE_DIR, caso);
         sprintf(archOut, "%sResultado%d.txt", BASE_DIR, caso);
+<<<<<<< HEAD
 
         int lenEnc;
         unsigned char* enc = leerArchivoBinario(archEnc, &lenEnc);
@@ -199,6 +272,25 @@ int main() {
         char metodo[8] = "";
 
         // Fuerza bruta de n y K
+=======
+        
+        int lenEnc;
+        unsigned char* enc = leerArchivoBinario(archEnc, &lenEnc);
+        if (!enc) { printf("No se pudo abrir %s\n", archEnc); continue; }
+        
+        char fragmento[MAX_FRAGMENTO];
+        if (leerPrimeraLinea(archPista, fragmento, sizeof(fragmento)) != 0) {
+            cout<<("No se pudo abrir %s\n", archPista);
+            free(enc); continue;
+        }
+        
+        unsigned char* desen = (unsigned char*) malloc(lenEnc);
+        char* salida = (char*) malloc(MAX_SALIDA);
+        
+        int encontrado = 0, nOK = -1, kOK = -1, outLen = 0;
+        char metodo[8] = "";
+// Fuerza bruta de n y K
+>>>>>>> c3509c19ab68f320c970b263dfd7cf48f19dc139
         for (int n = 1; n <= 7 && !encontrado; n++) {
             for (int K = 0; K <= 255 && !encontrado; K++) {
                 for (int i = 0; i < lenEnc; i++) {
